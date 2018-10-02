@@ -12,7 +12,7 @@ function valid(r,n){  if(r != null){    return r[n];  }else{ return '';}}
 
 
 function getIdArr(){
-  var alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","Y","Z"]; //lol. bug chasing!
+  var alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","Y","Z","OTHER"]; 
   var containArr = [];
   for(a=0; a<alph.length; a++) {
     var url = "http://newyork.advertisingweek.com/speakers?list="+alph[a];
