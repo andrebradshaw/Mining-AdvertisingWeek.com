@@ -1,5 +1,6 @@
-var ss = SpreadsheetApp.openById("YOUR_sh33t_ID_goes_here");//need to call the Spreadsheet by its ID
+var ss = SpreadsheetApp.openById("1v5FImFCzt-RbAmyTVDlOXTOuDV8oQmHVqoytoxtaWb0");//need to call the Spreadsheet by its ID
 var s1 = ss.getSheetByName("Sheet1");
+var idSheet = ss.getSheetByName("ids");
 
 function regX(r,n){
   if(r != null){
@@ -8,12 +9,25 @@ function regX(r,n){
     return '';
   }
 }
+function getUniqueRowNumbers(matchArr){  var unqArr = [];  matchArr.filter(function(elm,pos,arr){        if(arr.indexOf(elm) == pos){      unqArr.push(arr.indexOf(elm));    }    });  return unqArr;}
+function splitarray(input, spacing) {    var output = [];    for (i = 0; i < input.length; i += spacing) {        output[output.length] = input.slice(i, i + spacing);    }    return output;}
 
+function deDuped(){
+  var colToClean = [].concat.apply([], s1.getRange(1,2,s1.getLastRow(),1).getValues());
+  var rowsToPull = getUniqueRowNumbers(colToClean);
+  var dd = ss.insertSheet("deDuped_"+s1.getSheetName());
+  var allRows = s1.getRange(1,1,s1.getLastRow(), s1.getLastColumn()).getValues();
+  var newSheetCols = [];
+  for(i=0; i<rowsToPull.length; i++){
+    var r = rowsToPull[i];
+    newSheetCols.push(allRows[r]);
+  }
+  dd.getRange(1,1,newSheetCols.length,newSheetCols[0].length).setValues(newSheetCols);
+}
 
 function parseHTMLbyId(id) {
-  var containArr = []; //empty array. this is overkill at this point, but will be useful at scale.
+  var containArr = []; //empty array. this is overkill at this point, but will be useful at scale. 
   var respAll = UrlFetchApp.fetchAll(id);
-  //now we are going to call all the URLs at once. We will gget an array of responses, so we need to parse each one individually.
   for(i=0; i<respAll.length; i++){
     var resp = respAll[i].toString().replace(/\n|\r/g, '');
     var fullname = regX(/<h1>(.+?)<\/h1>/.exec(resp),1);
@@ -30,8 +44,9 @@ function parseHTMLbyId(id) {
 }
 function createUrls(arr){  return arr.map(function(el){  return "http://newyork.advertisingweek.com/speakers/?id="+el;}); }
 
-function runrun(){
-  var start = [8391,8390,8389,8388,8387,8386,8385,8384];
-  var urls = createUrls(start);
-  parseHTMLbyId(urls); //oops.
-}
+
+function runrun(){  
+  var ids = idSheet.getRange(1,1,idSheet.getLastRow(),1).getValues().join().split(',').map(Number);  
+  var urls = createUrls(ids);//arr[i]);
+  parseHTMLbyId(urls); 
+} 
