@@ -1,4 +1,4 @@
-var ss = SpreadsheetApp.openById("1v5FImFCzt-RbAmyTVDlOXTOuDV8oQmHVqoytoxtaWb0");//need to call the Spreadsheet by its ID
+var ss = SpreadsheetApp.openById("YOUR_ID");
 var s1 = ss.getSheetByName("Sheet1");
 var idSheet = ss.getSheetByName("ids");
 
